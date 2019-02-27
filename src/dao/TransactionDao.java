@@ -8,9 +8,9 @@ import model.transaction;
 import resources.myQuries;
 
 public class TransactionDao extends dbconnection_abstract {
-	
+
 	public List<transaction> gettotalbyZip(int zip, int month ,int year) throws Exception {
-		
+
 		myconnection();
 		ps = con.prepareStatement(myQuries.transactionsByZip);
 		ps.setInt(1, zip);
@@ -60,7 +60,7 @@ public class TransactionDao extends dbconnection_abstract {
 		}		
 		return null;
 	}
-	
+
 	public customer checkaccountDetails(String firstname , String lastname, int ssn4) throws Exception {
 		myconnection();
 		ps = con.prepareStatement(myQuries.checkAccountDetails);
@@ -83,6 +83,53 @@ public class TransactionDao extends dbconnection_abstract {
 			c.setEmail(rs.getString(11));
 			return c;
 		}		
+
+
 		return null;
 	}
+
+	public List<transaction> generatemonthlyStatement(String cardnumber, int ssn , int month ,int year) throws Exception {
+
+		myconnection();
+		ps = con.prepareStatement(myQuries.generateBill);
+		ps.setInt(1, month);
+		ps.setInt(2, year);
+		ps.setString(3, cardnumber);
+		ps.setInt(4, ssn);
+		rs = ps.executeQuery();
+		List<transaction> list= new ArrayList<transaction>();
+		while(rs.next()) {
+			transaction t = new transaction();
+			t.setDay(rs.getInt(1));
+			t.setCardNo(rs.getString(2));
+			t.setValue(rs.getInt(3));
+			t.setType(rs.getString(4));
+			list.add(t);
+		}		
+		return list;
+	}
+	
+	public List<transaction> transactionsbetweenDates(String cardnumber, int ssn, String date1, String date2) throws Exception{
+		
+		myconnection();
+		ps = con.prepareStatement(myQuries.transactionsBetweenDates);
+		ps.setString(1, cardnumber);
+		ps.setInt(2, ssn);
+		ps.setString(3, date1);
+		ps.setString(4, date2);
+		rs = ps.executeQuery();
+		List<transaction> list= new ArrayList<transaction>();
+		while(rs.next()) {
+			transaction t = new transaction();
+			t.setCardNo(rs.getString(1));
+			t.setSsn(rs.getInt(2));
+			t.setType(rs.getString(3));
+			t.setValue(rs.getInt(4));
+			t.setDate(rs.getString(5));
+			list.add(t);
+		}		
+		return list;
+	}
+
+	
 }

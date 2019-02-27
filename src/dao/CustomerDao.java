@@ -28,4 +28,18 @@ public class CustomerDao extends dbconnection_abstract {
 		}		
 		return null;
 	}
+	
+	public customer updateDetails(String columnName, String newvalue, String firstName, String lastName, int ssn) throws Exception {
+		
+		myconnection();
+		ps = con.prepareStatement(String.format(myQuries.modifyAccountDetails, columnName));
+		ps.setString(1, newvalue);
+		ps.setString(2, firstName);
+		ps.setString(3, lastName);
+		ps.setInt(4, ssn);
+		int i = ps.executeUpdate();
+		System.out.println("\n" + i + " record(s) successfully updated!\n");
+		return null;
+	
+	}
 }

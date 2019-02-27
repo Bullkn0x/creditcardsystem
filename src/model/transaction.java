@@ -2,8 +2,16 @@ package model;
 
 public class transaction{
 	protected int ID, day, month, year, ssn, branchCode, count, Value;
-	protected String cardNo, type;
+	protected String cardNo, type ,date;
 	
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
 	public int getID() {
 		return ID;
 	}
